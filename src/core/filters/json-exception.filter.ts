@@ -1,22 +1,23 @@
-import {
+import type {
   ArgumentsHost,
-  Catch,
   ExceptionFilter,
+} from '@nestjs/common'
+import {
+  Catch,
   HttpException,
   HttpStatus,
 } from '@nestjs/common'
-import type { Response, Request } from 'express'
+import type { Request, Response } from 'express'
 
 @Catch()
 export class JsonExceptionFilter<T> implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()
-    const request = ctx.getRequest<Request>()
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR
+    // const request = ctx.getRequest<Request>()
+    const status = exception instanceof HttpException
+      ? exception.getStatus()
+      : HttpStatus.INTERNAL_SERVER_ERROR
 
     const message = exception.message
       ? exception.message
@@ -24,9 +25,8 @@ export class JsonExceptionFilter<T> implements ExceptionFilter {
 
     const errRes = {
       code: status,
-      data: {},
-      err_msg: message,
-      err_no: 1
+      result: null,
+      message,
     }
     response.status(status)
     response.header('Content-Type', 'application/json; charset=utf-8')

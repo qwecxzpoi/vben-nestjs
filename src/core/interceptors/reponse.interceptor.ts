@@ -7,13 +7,11 @@ export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const response = context.switchToHttp().getResponse<Response>()
     return next.handle().pipe(
-      map(data => ({
+      map(result => ({
         code: response.statusCode,
-        data,
-        err_msg: '',
-        err_no: 0,
+        result,
+        message: 'ok',
       }))
     )
-    return next.handle()
   }
 }
