@@ -1,16 +1,9 @@
-import type {
-  ArgumentsHost,
-  ExceptionFilter,
-} from '@nestjs/common'
-import {
-  Catch,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common'
+import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common'
+import { Catch, HttpException, HttpStatus } from '@nestjs/common'
 import type { Request, Response } from 'express'
 
 @Catch()
-export class JsonExceptionFilter<T> implements ExceptionFilter {
+export class JsonExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()
